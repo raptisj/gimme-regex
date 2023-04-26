@@ -7,8 +7,7 @@ const configuration = new Configuration({
 
 export const openai = new OpenAIApi(configuration);
 
-const generateResult = async ({ query }: { query: string }) => {
-  const language = "JavaScript";
+const generateResult = async ({ query, language = 'JavaScript' }: { query: string, language?: string }) => {
   const promptByWord = `You have to find the proper ${language} regex pattern based on the following description. ${query}. Please provide one example in code.`;
   const promptByPattern = `Give a two sentence explanation of the following ${language} regex pattern: ${query}`;
 
@@ -38,10 +37,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { query } = req.body;
-  const result = await generateResult({ query });
+  const { query, language } = req.body;
+  const result = await generateResult({ query, language });
 
-  res.status(200).json({ result });
+  res.status(200).json({ data: result });
 }
 
 // const question = "replace all - from a string with spaces";
@@ -50,6 +49,7 @@ export default async function handler(
 //
 // find the 100 most searched google questions about JavaScript regex patterns
 //
+// passoword validation that starts with either an underscore or asterisk, followed by at least 5 digits, followed by least 4 letters. It must contain uppercase letters, lowercase letters. It should exclude @ symbols. It must exclude the following characters: - ( ) ;.
 //
 //
 // Email validation

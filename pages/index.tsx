@@ -4,11 +4,25 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { Box, Button, HStack, Input, Text, Flex } from "@chakra-ui/react";
 import { Loader } from "../components";
-import { PatternPreview, ContentPreview } from "../components";
+import {
+  PatternPreview,
+  ContentPreview,
+  LanguageOptionButton,
+} from "../components";
 import { remark } from "remark";
 import html from "remark-html";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const supportedLanguages = [
+  "JavaScript",
+  "Python",
+  "Golang",
+  "Java 8",
+  "Rust",
+  "PCRE2(PHP >=7.3)",
+  "PCRE(PHP <7.3)",
+];
 
 const initialResultState = {
   query: "",
@@ -24,6 +38,7 @@ export default function Home() {
   const [question, setQuestion] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [languageSearch, setLanguageSearch] = React.useState("JavaScript");
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -38,21 +53,20 @@ export default function Home() {
       },
       body: JSON.stringify({
         query: searchQuery,
+        language: languageSearch,
       }),
     });
     setLoading(false);
 
-    const data = await res.json();
+    const { data } = await res.json();
 
-    const processedContent = await remark()
-      .use(html)
-      .process(data.result.result.text);
+    const processedContent = await remark().use(html).process(data.result.text);
     const contentHtml = processedContent.toString();
 
     setQuestion(searchQuery);
     setFinalResult({
-      ...data.result,
-      result: { ...data.result.result, contentHtml },
+      ...data,
+      result: { ...data.result, contentHtml },
     });
     setSearchQuery("");
   };
@@ -80,6 +94,16 @@ export default function Home() {
           </Text>
 
           <Box mt={6}>
+            <Flex mb={2} flexWrap="wrap" maxWidth="260px" gap="4px">
+              {supportedLanguages.map((s) => (
+                <LanguageOptionButton
+                  key={s}
+                  label={s}
+                  selected={languageSearch}
+                  onClick={setLanguageSearch}
+                />
+              ))}
+            </Flex>
             <form onSubmit={handleSubmit}>
               <HStack spacing={2}>
                 <Input
