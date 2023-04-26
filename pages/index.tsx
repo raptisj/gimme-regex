@@ -122,7 +122,7 @@ export default function Home() {
                   ))}
 
                 <Tooltip
-                  label={languageExpand ? "Show less" : "More languages"}
+                  label={languageExpand ? "" : "More languages"}
                   placement={languageExpand ? "right" : "top"}
                   hasArrow
                 >
@@ -154,7 +154,7 @@ export default function Home() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   value={searchQuery}
                 />
-                <Button type="submit">submit</Button>
+                <Button type="submit">gimme</Button>
               </HStack>
             </form>
 

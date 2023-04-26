@@ -18,7 +18,7 @@ const generateResult = async ({ query, language = 'JavaScript' }: { query: strin
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: isRegexType ? promptByPattern : promptByWord,
-      max_tokens: 100,
+      max_tokens: 80,
       temperature: 0,
       n: 1,
     });
