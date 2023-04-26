@@ -4,9 +4,11 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { remark } from "remark";
 import html from "remark-html";
+import { ArrowRightIcon, ArrowLeftIcon } from "@chakra-ui/icons";
 import {
   useDisclosure,
   Box,
+  Tooltip,
   Button,
   HStack,
   Input,
@@ -45,6 +47,7 @@ export default function Home() {
   const [loading, setLoading] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [languageSearch, setLanguageSearch] = React.useState("JavaScript");
+  const [languageExpand, setLanguageExpand] = React.useState(false);
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -90,7 +93,7 @@ export default function Home() {
         <title>Gimme Regex</title>
         <meta
           name="description"
-          content="Describe a regex pattern you are looking or paste a pattern to get the explanation of it"
+          content="Describe the regex pattern you are looking for or paste a pattern to get the explanation of it"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -100,21 +103,45 @@ export default function Home() {
         <Box maxW="490px">
           <h1>_ _Gimme_Regex__</h1>
           <Text>
-            Describe a regex pattern you are looking or paste a pattern to get
-            the explanation of it
+            Describe the regex pattern you are looking for or paste a pattern to
+            get the explanation of it
           </Text>
 
           <Box mt={6}>
             <Flex justifyContent="space-between">
               <Flex mb={2} flexWrap="wrap" maxWidth="260px" gap="4px">
-                {supportedLanguages.map((s) => (
-                  <LanguageOptionButton
-                    key={s}
-                    label={s}
-                    selected={languageSearch}
-                    onClick={setLanguageSearch}
-                  />
-                ))}
+                {supportedLanguages
+                  .filter((s) => (languageExpand ? true : s === languageSearch))
+                  .map((s) => (
+                    <LanguageOptionButton
+                      key={s}
+                      label={s}
+                      selected={languageSearch}
+                      onClick={setLanguageSearch}
+                    />
+                  ))}
+
+                <Tooltip
+                  label={languageExpand ? "Show less" : "More languages"}
+                  placement={languageExpand ? "right" : "top"}
+                  hasArrow
+                >
+                  <Flex
+                    background="teal.700"
+                    width="20px"
+                    justifyContent="center"
+                    alignItems="center"
+                    borderRadius={4}
+                    cursor="pointer"
+                    onClick={() => setLanguageExpand(!languageExpand)}
+                  >
+                    {languageExpand ? (
+                      <ArrowLeftIcon w={2} h={2} color="white" />
+                    ) : (
+                      <ArrowRightIcon w={2} h={2} color="white" />
+                    )}
+                  </Flex>
+                </Tooltip>
               </Flex>
               <Button size="xs" fontSize="10px" onClick={onOpen}>
                 common lookups

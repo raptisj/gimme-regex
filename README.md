@@ -1,6 +1,6 @@
 # Gimme Regex 🥋
 
-Describe a regex pattern you are looking or paste a pattern to get the explanation of it. 
+Describe the regex pattern you are looking for or paste a pattern to get the explanation of it.
 
 Supported languages: 
   - JavaScript
